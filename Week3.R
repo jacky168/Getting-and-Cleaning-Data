@@ -30,18 +30,23 @@ quantile(img, probs=c(0.3,0.8))
 ### Q3
 fgdpFileURL <- 'https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FGDP.csv'
 download.file(fgdpFileURL, destfile = './data/FGDP.csv', method='curl')
-df1 <- read.csv('./data/FGDP.csv', skip = 5, header = FALSE)
-df1 <- df1[,1:5]
-df1 <- df1[,-3]
-colnames(df1) <- c('CountryCode', 'Ranking', 'CountryName', 'GDP')
-df11 <- subset(df1, factor(Ranking) != "" & factor(CountryCode) != "")
+df1 <- read.csv('./data/FGDP.csv',  skip = 5, nrows = 190, stringsAsFactors = F, header = F)
+df1 <- df1[,c(1,2,4,5)]
+colnames(df1) <- c("CountryCode", "Rank", "Country.Name", "GDP.Value")
+#df11 <- subset(df1, factor(Ranking) != "" & factor(CountryCode) != "")
 
 
 countryFileURL <- 'https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2FEDSTATS_Country.csv'
 download.file(countryFileURL, destfile = './data/Country.csv', method='curl')
 df2 <- read.csv('./data/Country.csv')
 
-df3 <- merge(df11, df22, by = "CountryCode")
+df3 <- merge(df1, df2, by = "CountryCode")
 nrow(df3)
 
-order(df3)
+library(plyr)
+arrange(matchedData, desc(Rank))[13, 3]
+
+### Q4
+mean(subset(df3, Income.Group %in% "High income: OECD", select = c(Rank))$Rank)
+
+
