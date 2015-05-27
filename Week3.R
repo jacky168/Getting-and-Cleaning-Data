@@ -44,7 +44,7 @@ df3 <- merge(df1, df2, by = "CountryCode")
 nrow(df3)
 
 library(plyr)
-arrange(matchedData, desc(Rank))[13, 3]
+arrange(df3, desc(Rank))[13, 3]
 
 ### Q4
 mean(subset(df3, Income.Group %in% "High income: OECD", select = c(Rank))$Rank)
